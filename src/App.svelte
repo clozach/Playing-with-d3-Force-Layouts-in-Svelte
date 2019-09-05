@@ -46,7 +46,7 @@
       .force(
         "y",
         d3.forceY().y(function(d) {
-          return height * levelMap[d.height];
+          return 0.8 * height * levelMap[d.height];
         })
       )
       .force(
