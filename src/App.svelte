@@ -32,8 +32,12 @@
     var simulation = d3.forceSimulation().nodes(nodes_data);
     simulation
       .force("charge_force", d3.forceManyBody())
-      .force("collisions", d3.forceCollide().radius(d => 73))
-      .force("center_force", d3.forceCenter(width / 2, height / 2));
+      .force("collisions", d3.forceCollide().radius(d => 90))
+      .force("center_force", d3.forceCenter(width / 2 - 90, height / 2 - 90));
+    // 👆 Magic number, 90 _seems_ ever-so-slightly-more centered than
+    // what I tried on my first pass through: 73. 73 is the pixel width
+    // of the balloons un-scaled.
+
     simulation.on("tick", () => {
       //update circle positions to reflect node updates on each tick of the simulation
       node.attr("transform", d => {
