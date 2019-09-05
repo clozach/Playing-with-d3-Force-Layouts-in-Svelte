@@ -16,7 +16,7 @@
 
   const setUpD3 = () => {
     var svg = d3.select("svg");
-    var node = svg
+    var selectedBalloons = svg
       .select("g")
       .selectAll("svg") // Selects all the <svg>'s under <g>
       .data(nodes_data); // Binds the data to those nodes for use during rendering
@@ -25,12 +25,12 @@
     simulation
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(24))
-      .force("center_force", d3.forceCenter(width / 2 - 45, height / 2 - 45));
+      .force("center_force", d3.forceCenter(width / 2 - 30, height / 2 - 30));
 
     simulation.on("tick", () => {
       //update circle positions to reflect node updates on each tick of the simulation
-      node.attr("x", d => d.x);
-      node.attr("y", d => d.y);
+      selectedBalloons.attr("x", d => d.x);
+      selectedBalloons.attr("y", d => d.y);
     });
   };
 
