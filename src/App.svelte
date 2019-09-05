@@ -10,8 +10,17 @@
     { id: "Flakips", height: 0.3 },
     { id: "Groppie", height: 0.9 },
     { id: "Czostle", height: 0.5 },
-    { id: "Qualxir", height: 0.2 },
-    { id: "Merilio", height: 0.7 }
+    { id: "Qualxir", height: 0.1 },
+    { id: "Merilio", height: 0.7 },
+    { id: "Grunhol", height: 0.1 },
+    { id: "Yaaasss", height: 0.7 },
+    { id: "Pouppah", height: 0.1 },
+    { id: "Jowdwac", height: 0.1 },
+    { id: "Heltchu", height: 0.1 },
+    { id: "Flowdar", height: 0.1 },
+    { id: "Oeoeooo", height: 0.1 },
+    { id: "Nopnope", height: 0.1 },
+    { id: "Regreps", height: 0.7 }
   ];
 
   const setUpD3 = () => {
