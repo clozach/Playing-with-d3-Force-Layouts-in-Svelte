@@ -2,13 +2,7 @@
   export let id;
 </script>
 
-<svg
-  {id}
-  width="45"
-  height="58"
-  viewBox="0 0 45 58"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg">
+<svg {id} fill="#f0c0c0" xmlns="http://www.w3.org/2000/svg">
   <g id="Small Balloon Shape">
     <path
       fill-rule="evenodd"
