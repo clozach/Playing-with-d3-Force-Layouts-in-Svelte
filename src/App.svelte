@@ -71,7 +71,7 @@
     font-family: "Helvetica", "Arial", sans-serif;
     height: 100%;
     width: 100%;
-    background: salmon;
+    background: linear-gradient(to top, #ddfdff, #6dd5fa, #2980b9);
     position: absolute;
     top: 0;
     left: 0;
