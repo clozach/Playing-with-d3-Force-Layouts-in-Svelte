@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { balloonIt } from "./Balloon.svelte";
+  import Balloon from "./Balloon.svelte";
 
   let width;
   let height;
@@ -17,12 +17,9 @@
   const setUpD3 = () => {
     var svg = d3.select("svg");
     var node = svg
-      .append("g")
-      .attr("class", "nodes")
-      .selectAll("unused") // Param detail seems irrelevant here, so far.
-      .data(nodes_data);
-
-    node = balloonIt(node);
+      .select("g")
+      .selectAll("svg") // Selects all the <svg>'s under <g>
+      .data(nodes_data); // Binds the data to those nodes for use during rendering
 
     var simulation = d3.forceSimulation().nodes(nodes_data);
     simulation
@@ -32,9 +29,8 @@
 
     simulation.on("tick", () => {
       //update circle positions to reflect node updates on each tick of the simulation
-      node.attr("transform", d => {
-        return `translate(${d.x},${d.y})`;
-      });
+      node.attr("x", d => d.x);
+      node.attr("y", d => d.y);
     });
   };
 
@@ -52,13 +48,14 @@
     left: 0;
     z-index: -1;
   }
-
-  h1 {
-    color: green;
-  }
 </style>
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
-<svg />
-
-<h1>Hello</h1>
+<svg>
+  <g class="nodes">
+    {#each nodes_data as d}
+      <Balloon id={d.id} />
+    {/each}
+    }
+  </g>
+</svg>
