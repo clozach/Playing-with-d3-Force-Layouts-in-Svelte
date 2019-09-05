@@ -5,22 +5,31 @@
   let width;
   let height;
 
+  // Remember, SVG origin is at the top left, so top is 0.1
+  const levelMap = {
+    top: 0.1,
+    up: 0.3,
+    middle: 0.5,
+    down: 0.7,
+    bottom: 0.9
+  };
+
   var nodes_data = [
-    { id: "Brimble", height: 0.1 },
-    { id: "Flakips", height: 0.3 },
-    { id: "Groppie", height: 0.9 },
-    { id: "Czostle", height: 0.5 },
-    { id: "Qualxir", height: 0.1 },
-    { id: "Merilio", height: 0.7 },
-    { id: "Grunhol", height: 0.1 },
-    { id: "Yaaasss", height: 0.7 },
-    { id: "Pouppah", height: 0.1 },
-    { id: "Jowdwac", height: 0.1 },
-    { id: "Heltchu", height: 0.1 },
-    { id: "Flowdar", height: 0.1 },
-    { id: "Oeoeooo", height: 0.1 },
-    { id: "Nopnope", height: 0.1 },
-    { id: "Regreps", height: 0.7 }
+    { id: "Brimble", height: "bottom" },
+    { id: "Flakips", height: "down" },
+    { id: "Groppie", height: "top" },
+    { id: "Czostle", height: "middle" },
+    { id: "Qualxir", height: "bottom" },
+    { id: "Merilio", height: "up" },
+    { id: "Grunhol", height: "bottom" },
+    { id: "Yaaasss", height: "up" },
+    { id: "Pouppah", height: "bottom" },
+    { id: "Jowdwac", height: "bottom" },
+    { id: "Heltchu", height: "bottom" },
+    { id: "Flowdar", height: "bottom" },
+    { id: "Oeoeooo", height: "bottom" },
+    { id: "Nopnope", height: "bottom" },
+    { id: "Regreps", height: "up" }
   ];
 
   const setUpD3 = () => {
@@ -33,11 +42,22 @@
     var simulation = d3.forceSimulation().nodes(nodes_data);
     simulation
       .force("charge_force", d3.forceManyBody().strength(-5))
-      .force("collisions", d3.forceCollide().radius(24))
-      .force("center_force", d3.forceCenter(width / 2 - 30, height / 2 - 30));
+      .force("collisions", d3.forceCollide().radius(30))
+      .force(
+        "y",
+        d3.forceY().y(function(d) {
+          return height * levelMap[d.height];
+        })
+      )
+      .force(
+        "x",
+        d3.forceX().x(function(d) {
+          return width / 2;
+        })
+      );
 
     simulation.on("tick", () => {
-      //update circle positions to reflect node updates on each tick of the simulation
+      //update balloon positions to reflect node updates on each tick of the simulation
       selectedBalloons.attr("x", d => d.x);
       selectedBalloons.attr("y", d => d.y);
     });
