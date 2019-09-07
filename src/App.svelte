@@ -30,6 +30,18 @@
         d.fy = null;
       }, i * (totalDuration / count));
     });
+
+    balloons
+      .selectAll("g")
+      .transition()
+      .duration(1000)
+      .ease(d3.easeSinIn)
+      .attrTween("transform", function(d) {
+        var i = d3.interpolate(0.5, 1);
+        return function(t) {
+          return `scale(${i(t)})`;
+        };
+      });
   };
 
   /**
