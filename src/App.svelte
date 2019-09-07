@@ -26,11 +26,15 @@
       .data(data); // Binds the data to those nodes for use during rendering
   };
 
+  const createSimulation = data => {
+    return d3.forceSimulation().nodes(data);
+  };
+
   const setUpD3 = () => {
     var svg = d3.select("svg");
     var selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
 
-    var simulation = d3.forceSimulation().nodes(initialBalloons);
+    var simulation = createSimulation(initialBalloons);
     simulation
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
