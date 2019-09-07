@@ -33,16 +33,10 @@
   /**
    * Impure function. 🙀
    */
-  const applyForces = simulation => {
-    simulation
+  const applyBasicForces = sim => {
+    sim
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
-      .force(
-        "y",
-        d3.forceY().y(function(d) {
-          return 0.8 * height * levelMap[d.height];
-        })
-      )
       .force(
         "x",
         d3.forceX().x(function(d) {
@@ -51,12 +45,25 @@
       );
   };
 
+  /**
+   * Impure function. 🙀
+   */
+  const applyHeightForce = sim => {
+    sim.force(
+      "y",
+      d3.forceY().y(function(d) {
+        return 0.8 * height * levelMap[d.height];
+      })
+    );
+  };
+
   const setUpD3 = () => {
     const svg = d3.select("svg");
     const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
 
     const simulation = createSimulation(initialBalloons);
-    applyForces(simulation);
+    applyBasicForces(simulation);
+    applyHeightForce(simulation);
 
     simulation.on("tick", () => {
       //update balloon positions to reflect node updates on each tick of the simulation
