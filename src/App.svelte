@@ -15,8 +15,6 @@
     bottom: 0.9
   };
 
-  var nodes_data = initialBalloons;
-
   /**
    * d3 Combination: binds the given data to Svelte-rendered svgs &
    * returns the equivalent selection.
@@ -30,9 +28,9 @@
 
   const setUpD3 = () => {
     var svg = d3.select("svg");
-    var selectedBalloons = bindAndSelectBalloons(svg, nodes_data);
+    var selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
 
-    var simulation = d3.forceSimulation().nodes(nodes_data);
+    var simulation = d3.forceSimulation().nodes(initialBalloons);
     simulation
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
@@ -75,7 +73,7 @@
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
 <svg>
   <g class="nodes">
-    {#each nodes_data as d}
+    {#each initialBalloons as d}
       <Balloon id={d.id} />
     {/each}
     }
