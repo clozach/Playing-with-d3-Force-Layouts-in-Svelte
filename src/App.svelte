@@ -16,10 +16,12 @@
   };
 
   const prep = balloons => {
-    balloons.attr("fy", d => (d.fy = -100));
+    balloons.attr("fx", d => (d.fx = -100));
+    balloons.attr("fy", d => (d.fy = 0.8 * height));
   };
 
   const drop = balloons => {
+    balloons.attr("fx", d => (d.fx = null));
     balloons.attr("fy", d => (d.fy = null));
   };
 
