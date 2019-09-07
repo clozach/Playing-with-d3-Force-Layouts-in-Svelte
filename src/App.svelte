@@ -76,14 +76,21 @@
     applyBasicForces(simulation);
     applyHeightForce(simulation);
 
+    var dropper = () => {
+      d3.timeout(() => {
+        drop(selectedBalloons);
+      }, 1000);
+    };
+
     simulation.on("tick", () => {
       //update balloon positions to reflect node updates on each tick of the simulation
       selectedBalloons.attr("x", d => d.x);
       selectedBalloons.attr("y", d => d.y);
 
-      var timer = d3.timer(() => {
-        drop(selectedBalloons);
-      }, 1000);
+      if (dropper) {
+        dropper();
+        dropper = null;
+      }
     });
   };
 
