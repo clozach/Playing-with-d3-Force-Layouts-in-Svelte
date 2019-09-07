@@ -17,12 +17,20 @@
 
   var nodes_data = initialBalloons;
 
-  const setUpD3 = () => {
-    var svg = d3.select("svg");
-    var selectedBalloons = svg
+  /**
+   * d3 Combination: binds the given data to Svelte-rendered svgs &
+   * returns the equivalent selection.
+   */
+  const bindAndSelectBalloons = (rootSVG, data) => {
+    return rootSVG
       .select("g")
       .selectAll("svg") // Selects all the <svg>'s under <g>
-      .data(nodes_data); // Binds the data to those nodes for use during rendering
+      .data(data); // Binds the data to those nodes for use during rendering
+  };
+
+  const setUpD3 = () => {
+    var svg = d3.select("svg");
+    var selectedBalloons = bindAndSelectBalloons(svg, nodes_data);
 
     var simulation = d3.forceSimulation().nodes(nodes_data);
     simulation
