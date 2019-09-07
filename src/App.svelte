@@ -15,6 +15,14 @@
     bottom: 0.9
   };
 
+  const prep = balloons => {
+    balloons.attr("fy", d => (d.fy = -100));
+  };
+
+  const drop = balloons => {
+    balloons.attr("fy", d => (d.fy = null));
+  };
+
   /**
    * d3 Combination: binds the given data to Svelte-rendered svgs &
    * returns the equivalent selection.
@@ -62,6 +70,7 @@
     const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
 
     const simulation = createSimulation(initialBalloons);
+    prep(selectedBalloons);
     applyBasicForces(simulation);
     applyHeightForce(simulation);
 
@@ -69,6 +78,10 @@
       //update balloon positions to reflect node updates on each tick of the simulation
       selectedBalloons.attr("x", d => d.x);
       selectedBalloons.attr("y", d => d.y);
+
+      var timer = d3.timer(() => {
+        drop(selectedBalloons);
+      }, 1000);
     });
   };
 
