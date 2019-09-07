@@ -30,11 +30,10 @@
     return d3.forceSimulation().nodes(data);
   };
 
-  const setUpD3 = () => {
-    var svg = d3.select("svg");
-    var selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
-
-    var simulation = createSimulation(initialBalloons);
+  /**
+   * Impure function. 🙀
+   */
+  const applyForces = simulation => {
     simulation
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
@@ -50,6 +49,14 @@
           return width / 2;
         })
       );
+  };
+
+  const setUpD3 = () => {
+    const svg = d3.select("svg");
+    const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
+
+    const simulation = createSimulation(initialBalloons);
+    applyForces(simulation);
 
     simulation.on("tick", () => {
       //update balloon positions to reflect node updates on each tick of the simulation
