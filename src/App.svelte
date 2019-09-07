@@ -21,8 +21,15 @@
   };
 
   const drop = balloons => {
-    balloons.attr("fx", d => (d.fx = null));
-    balloons.attr("fy", d => (d.fy = null));
+    const count = balloons._groups[0].length;
+    const totalDuration = 600; // In ms, per usual
+
+    balloons.each((d, i) => {
+      d3.timeout(() => {
+        d.fx = null;
+        d.fy = null;
+      }, i * (totalDuration / count));
+    });
   };
 
   /**
