@@ -60,9 +60,9 @@
   };
 
   /**
-   * Impure function. 🙀
+   * Configures the simulation with the forces that position the balloons in their final resting place.
    */
-  const applyBasicForces = sim => {
+  const setSimulationForces = sim => {
     sim
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
@@ -71,19 +71,13 @@
         d3.forceX().x(function(d) {
           return width / 2;
         })
+      )
+      .force(
+        "y",
+        d3.forceY().y(function(d) {
+          return 0.8 * height * levelMap[d.height];
+        })
       );
-  };
-
-  /**
-   * Impure function. 🙀
-   */
-  const applyHeightForce = sim => {
-    sim.force(
-      "y",
-      d3.forceY().y(function(d) {
-        return 0.8 * height * levelMap[d.height];
-      })
-    );
   };
 
   const setUpD3 = () => {
@@ -92,8 +86,7 @@
 
     const simulation = createSimulation(initialBalloons);
     prep(selectedBalloons);
-    applyBasicForces(simulation);
-    applyHeightForce(simulation);
+    setSimulationForces(simulation);
 
     var dropper = () => {
       d3.timeout(() => {
