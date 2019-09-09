@@ -14,6 +14,21 @@
     { id: "Flowdar", height: "bottom" },
     { id: "Oeoeooo", height: "bottom" },
     { id: "Nopnope", height: "bottom" },
-    { id: "Regreps", height: "up" }
+    { id: "Regreps", height: "up" },
+    { id: "Trimble", height: "bottom" },
+    { id: "Fuakips", height: "down" },
+    { id: "Grippie", height: "top" },
+    { id: "Czogtle", height: "middle" },
+    { id: "Qualyir", height: "bottom" },
+    { id: "Merilzo", height: "up" },
+    { id: "Grunhom", height: "bottom" },
+    { id: "Naaasss", height: "up" },
+    { id: "Piuppah", height: "bottom" },
+    { id: "Jokdwac", height: "bottom" },
+    { id: "Helcchu", height: "bottom" },
+    { id: "Flowear", height: "bottom" },
+    { id: "Oeoeoio", height: "bottom" },
+    { id: "Nopnopt", height: "bottom" },
+    { id: "Degreps", height: "up" }
   ];
 </script>
