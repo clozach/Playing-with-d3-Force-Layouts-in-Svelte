@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import Balloon from "./Balloon.svelte";
   import { initialBalloons } from "./DataSource.svelte";
+  import { gridlines } from "./FeatureToggles.svelte";
+  import Gridlines from "./Gridlines.svelte";
 
   let width;
   let height;
@@ -130,4 +132,7 @@
     {/each}
     }
   </g>
+  {#if !!gridlines}
+    <Gridlines {width} {height} />
+  {/if}
 </svg>
