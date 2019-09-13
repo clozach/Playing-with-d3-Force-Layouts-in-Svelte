@@ -17,7 +17,7 @@
     bottom: 0.9
   };
 
-  const prep = balloons => {
+  const setInitialPositions = balloons => {
     balloons.attr("fx", d => (d.fx = -100));
     balloons.attr("fy", d => (d.fy = 0.8 * height));
   };
@@ -87,7 +87,7 @@
     const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
 
     const simulation = createSimulation(initialBalloons);
-    prep(selectedBalloons);
+    setInitialPositions(selectedBalloons);
     setSimulationForces(simulation);
 
     var dropper = () => {
