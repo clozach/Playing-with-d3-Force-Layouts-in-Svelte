@@ -1,9 +1,5 @@
-<script>
-  export let id;
-</script>
-
-<svg {id} fill="#f0c0c0" xmlns="http://www.w3.org/2000/svg">
-  <g id="Small Balloon Shape">
+<svg class="template-balloon" fill="#f0c0c0" xmlns="http://www.w3.org/2000/svg">
+  <g>
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -33,7 +29,10 @@
       0.194645 27.3897Z"
       fill="url(#paint0_radial)"
       fill-opacity="0.5" />
-    <text x="5" y="30" font-size=".7rem">{id}</text>
+    <text x="5" y="30" font-size=".7rem">
+      §
+      <!--§ == Placeholder-->
+    </text>
   </g>
   <defs>
     <radialGradient

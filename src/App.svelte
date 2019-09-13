@@ -80,8 +80,21 @@
       .force("y", d3.forceY().y(verticalLevelCenter));
   };
 
+  const cloneWithText = d => {
+    const templateBalloon = document.getElementsByClassName(
+      "template-balloon"
+    )[0];
+    const balloonGroup = document.getElementById("balloon-group");
+
+    var clone = templateBalloon.cloneNode(true);
+    clone.getElementsByTagName("text")[0].innerHTML = d.height;
+    clone.classList.toggle("template-balloon");
+    balloonGroup.append(clone);
+  };
+
   const setUpD3 = () => {
     const svg = d3.select("svg");
+    initialBalloons.forEach(cloneWithText);
     const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
 
     const simulation = createSimulation(initialBalloons);
@@ -125,14 +138,16 @@
 </style>
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
-<svg>
-  <g class="nodes">
-    {#each initialBalloons as d}
-      <Balloon id={d.id} />
-    {/each}
-    }
-  </g>
+<svg id="billow-field">
+  <g id="balloon-group" />
   {#if !!gridlines}
-    <Gridlines {width} {height} />
+    <g id="gridlines">
+      <Gridlines {width} {height} />
+    </g>
   {/if}
+  <defs>
+    <g id="empty-balloon">
+      <Balloon id="template" />
+    </g>
+  </defs>
 </svg>
