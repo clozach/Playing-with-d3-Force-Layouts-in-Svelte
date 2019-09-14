@@ -8,6 +8,7 @@
   let width;
   let height;
   let dataSource = [];
+  let simulation; // Can't be initialized before DOM
 
   // Remember, SVG origin is at the top left, so top is 0.1
   const levelMap = {
@@ -118,12 +119,11 @@
 
   const runSim = data => {
     const svg = d3.select("svg");
+    simulation.nodes(data);
     data.forEach(cloneWithText);
     const selectedBalloons = bindAndSelectBalloons(svg, data);
 
-    const simulation = createSimulation(data);
     setInitialPositions(selectedBalloons);
-    setSimulationForces(simulation);
 
     // This function works with `on("tick",…)` to ensure we only
     // call `drop` on the very first tick.
@@ -143,10 +143,15 @@
         dropper = null;
       }
     });
+
+    simulation.alpha(1).restart();
   };
 
   const setUpD3 = () => {
     dataSource = initialBalloons;
+    simulation = createSimulation(dataSource);
+    setSimulationForces(simulation);
+
     runSim(dataSource);
   };
 
