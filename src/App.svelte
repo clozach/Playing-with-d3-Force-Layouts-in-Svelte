@@ -82,7 +82,7 @@
       .force("y", d3.forceY().y(verticalLevelCenter));
   };
 
-  const cloneWithText = d => {
+  const cloneTemplateBalloonInDOM = d => {
     const templateBalloon = document.getElementsByClassName(
       "template-balloon"
     )[0];
@@ -117,7 +117,7 @@
   const runSim = data => {
     const svg = d3.select("svg");
     simulation.nodes(data);
-    data.forEach(cloneWithText);
+    data.forEach(cloneTemplateBalloonInDOM);
     const selectedBalloons = bindAndSelectBalloons(svg, data);
 
     setInitialPositions(selectedBalloons);
