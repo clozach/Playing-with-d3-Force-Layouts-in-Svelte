@@ -7,6 +7,7 @@
 
   let width;
   let height;
+  let dataSource = [];
 
   // Remember, SVG origin is at the top left, so top is 0.1
   const levelMap = {
@@ -86,18 +87,41 @@
     )[0];
     const balloonGroup = document.getElementById("balloon-group");
 
+    const template = d3.select(".template-balloon")._groups[0][0];
+    const field = document.getElementById("billow-field");
+
     var clone = templateBalloon.cloneNode(true);
     clone.getElementsByTagName("text")[0].innerHTML = d.height;
     clone.classList.toggle("template-balloon");
     balloonGroup.append(clone);
   };
 
-  const setUpD3 = () => {
-    const svg = d3.select("svg");
-    initialBalloons.forEach(cloneWithText);
-    const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
+  // https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
+  function cloneSelection(svg, appendTo, toCopy) {
+    toCopy.each(function() {
+      // `each` assigns each node to `this`
+      var clone = svg.node().appendChild(this.cloneNode(true));
+      d3.select(clone)
+        .attr("class", "clone")
+        .attr("id", "clone-" + i);
+    });
+    return appendTo.selectAll(".clone");
+  }
 
-    const simulation = createSimulation(initialBalloons);
+  const addOne = () => {
+    const newData = { id: "⭐️", height: "up" };
+    dataSource.push(newData);
+    runSim(dataSource);
+  };
+
+  /////////////////////////
+
+  const runSim = data => {
+    const svg = d3.select("svg");
+    data.forEach(cloneWithText);
+    const selectedBalloons = bindAndSelectBalloons(svg, data);
+
+    const simulation = createSimulation(data);
     setInitialPositions(selectedBalloons);
     setSimulationForces(simulation);
 
@@ -121,6 +145,11 @@
     });
   };
 
+  const setUpD3 = () => {
+    dataSource = initialBalloons;
+    runSim(dataSource);
+  };
+
   onMount(setUpD3);
 </script>
 
@@ -138,6 +167,9 @@
 </style>
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
+
+<button on:click={addOne}>➕🎈</button>
+
 <svg id="billow-field">
   <g id="balloon-group" />
   {#if !!gridlines}
