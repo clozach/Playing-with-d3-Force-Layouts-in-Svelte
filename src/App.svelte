@@ -88,9 +88,6 @@
     )[0];
     const balloonGroup = document.getElementById("balloon-group");
 
-    const template = d3.select(".template-balloon")._groups[0][0];
-    const field = document.getElementById("billow-field");
-
     var clone = templateBalloon.cloneNode(true);
     clone.getElementsByTagName("text")[0].innerHTML = d.height;
     clone.classList.toggle("template-balloon");
