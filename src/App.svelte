@@ -2,6 +2,17 @@
   import { onMount } from "svelte";
   import Balloon from "./Balloon.svelte";
   import { initialBalloons } from "./DataSource.svelte";
+  import {
+    levelMap,
+    bindAndSelectBalloons,
+    cloneTemplateBalloonInDOM,
+    setInitialPositions,
+    drop,
+    createSimulation,
+    horizontalCenter,
+    verticalLevelCenter,
+    setSimulationForces
+  } from "./D3Stuff.svelte";
   import { gridlines } from "./FeatureToggles.svelte";
   import Gridlines from "./Gridlines.svelte";
 
@@ -9,91 +20,6 @@
   let height;
   let dataSource = [];
   let simulation; // Can't be initialized before DOM
-
-  // Remember, SVG origin is at the top left, so top is 0.1
-  const levelMap = {
-    top: 0.1,
-    up: 0.3,
-    middle: 0.5,
-    down: 0.7,
-    bottom: 0.9
-  };
-
-  const setInitialPositions = balloons => {
-    balloons.attr("fx", d => (d.fx = -100));
-    balloons.attr("fy", d => (d.fy = 0.8 * height));
-  };
-
-  const drop = balloons => {
-    const count = balloons._groups[0].length;
-    const totalDuration = 600; // In ms, per usual
-
-    balloons.each((d, i) => {
-      d3.timeout(() => {
-        d.fx = null;
-        d.fy = null;
-      }, i * (totalDuration / count));
-    });
-
-    balloons
-      .selectAll("g")
-      .transition()
-      .duration(1000)
-      .ease(d3.easeSinIn)
-      .attrTween("transform", function(d) {
-        var i = d3.interpolate(0.5, 1);
-        return function(t) {
-          return `scale(${i(t)})`;
-        };
-      });
-  };
-
-  /**
-   * d3 Combination: binds the given data to Svelte-rendered svgs &
-   * returns the equivalent selection.
-   */
-  const bindAndSelectBalloons = (rootSVG, data) => {
-    return rootSVG
-      .select("g")
-      .selectAll("svg") // Selects all the <svg>'s under <g>
-      .data(data); // Binds the data to those nodes for use during rendering
-  };
-
-  const createSimulation = data => {
-    return d3.forceSimulation().nodes(data);
-  };
-
-  const horizontalCenter = d => {
-    return width / 2;
-  };
-
-  const verticalLevelCenter = d => {
-    return 0.8 * height * levelMap[d.height];
-  };
-
-  /**
-   * Configures the simulation with the forces that position the balloons in their final resting place.
-   */
-  const setSimulationForces = sim => {
-    sim
-      .force("charge_force", d3.forceManyBody().strength(-5))
-      .force("collisions", d3.forceCollide().radius(30))
-      .force("x", d3.forceX().x(horizontalCenter))
-      .force("y", d3.forceY().y(verticalLevelCenter));
-  };
-
-  const cloneTemplateBalloonInDOM = d => {
-    const templateBalloon = document.getElementsByClassName(
-      "template-balloon"
-    )[0];
-    const balloonGroup = document.getElementById("balloon-group");
-
-    // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
-    var clone = templateBalloon.cloneNode(true);
-    clone.getElementsByTagName("text")[0].innerHTML = d.height;
-    clone.classList.toggle("template-balloon");
-    balloonGroup.append(clone);
-  };
 
   const addOne = () => {
     const newData = { id: "⭐️", height: "up" };
@@ -104,12 +30,13 @@
   /////////////////////////
 
   const runSim = data => {
-    const svg = d3.select("svg");
     simulation.nodes(data);
     data.forEach(cloneTemplateBalloonInDOM);
+
+    const svg = d3.select("svg");
     const selectedBalloons = bindAndSelectBalloons(svg, data);
 
-    setInitialPositions(selectedBalloons);
+    setInitialPositions(selectedBalloons, height);
 
     // This function works with `on("tick",…)` to ensure we only
     // call `drop` on the very first tick.
@@ -136,7 +63,7 @@
   const setUpD3 = () => {
     dataSource = initialBalloons;
     simulation = createSimulation(dataSource);
-    setSimulationForces(simulation);
+    setSimulationForces(width, height, simulation);
 
     runSim(dataSource);
   };
