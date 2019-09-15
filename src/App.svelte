@@ -88,23 +88,12 @@
     )[0];
     const balloonGroup = document.getElementById("balloon-group");
 
+    // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
     var clone = templateBalloon.cloneNode(true);
     clone.getElementsByTagName("text")[0].innerHTML = d.height;
     clone.classList.toggle("template-balloon");
     balloonGroup.append(clone);
   };
-
-  // https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
-  function cloneSelection(svg, appendTo, toCopy) {
-    toCopy.each(function() {
-      // `each` assigns each node to `this`
-      var clone = svg.node().appendChild(this.cloneNode(true));
-      d3.select(clone)
-        .attr("class", "clone")
-        .attr("id", "clone-" + i);
-    });
-    return appendTo.selectAll(".clone");
-  }
 
   const addOne = () => {
     const newData = { id: "⭐️", height: "up" };
