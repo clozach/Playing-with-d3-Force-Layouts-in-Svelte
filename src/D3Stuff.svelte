@@ -9,7 +9,45 @@
   };
 
   export const createSimulation = data => {
-    return d3.forceSimulation().nodes(data);
+    return d3
+      .forceSimulation()
+      .alphaDecay(0)
+      .nodes(data);
+  };
+
+  /* I wasn't able to find documentation on how to create a
+     custom force, so I modified this one:
+
+         https://github.com/d3/d3-force/blob/master/src/x.js
+     
+     to create this jitter function.
+  */
+  const jitter = () => {
+    var nodes = [];
+
+    function force() {
+      const jitterMultiplier = 5;
+      const randomDistance = () => Math.random() * jitterMultiplier;
+
+      nodes.forEach(n => {
+        if (Math.random() > 0.5) {
+          n.vx += randomDistance();
+        } else {
+          n.vx -= randomDistance();
+        }
+        if (Math.random() > 0.5) {
+          n.vy += randomDistance();
+        } else {
+          n.vy -= randomDistance();
+        }
+      });
+    }
+
+    force.initialize = function(_) {
+      nodes = _;
+    };
+
+    return force;
   };
 
   /**
@@ -23,7 +61,8 @@
       .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
       .force("x", d3.forceX().x(horizontalCenter(width)))
-      .force("y", d3.forceY().y(centerY));
+      .force("y", d3.forceY().y(centerY))
+      .force("jitter", jitter());
   };
 
   /**
