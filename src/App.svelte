@@ -21,6 +21,14 @@
   let dataSource = [];
   let simulation; // Can't be initialized before DOM
 
+  const setUpD3 = () => {
+    dataSource = initialBalloons;
+    simulation = createSimulation(dataSource);
+    setSimulationForces(width, height, simulation);
+
+    runSim(dataSource);
+  };
+
   const addOne = () => {
     const newData = { id: "⭐️", height: "up" };
     dataSource.push(newData);
@@ -58,14 +66,6 @@
     });
 
     simulation.alpha(1).restart();
-  };
-
-  const setUpD3 = () => {
-    dataSource = initialBalloons;
-    simulation = createSimulation(dataSource);
-    setSimulationForces(width, height, simulation);
-
-    runSim(dataSource);
   };
 
   onMount(setUpD3);
