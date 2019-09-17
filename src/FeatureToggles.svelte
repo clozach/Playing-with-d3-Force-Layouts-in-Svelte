@@ -1,3 +1,3 @@
 <script context="module">
-  export let gridlines = true;
+  export let gridlines = false;
 </script>
