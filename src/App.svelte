@@ -84,7 +84,6 @@
    */
   const setSimulationForces = sim => {
     sim
-      .force("charge_force", d3.forceManyBody().strength(-5))
       .force("collisions", d3.forceCollide().radius(30))
       .force("x", d3.forceX().x(horizontalCenter))
       .force("y", d3.forceY().y(verticalLevelCenter));
