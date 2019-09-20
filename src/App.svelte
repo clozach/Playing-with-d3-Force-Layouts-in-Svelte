@@ -57,8 +57,18 @@
       .data(data); // Binds the data to those nodes for use during rendering
   };
 
-  const createSimulation = data => {
-    return d3.forceSimulation().nodes(data);
+  export const createSimulation = data => {
+    const sim = d3
+      .forceSimulation()
+      .alphaDecay(0.007) // Arrived at by trial and error
+      .nodes(data);
+
+    // Give the sim some time without decay, then…decay.
+    d3.timeout(() => {
+      sim.alphaDecay(0.0228); // Roughly the default value according to: https://github.com/d3/d3-force
+    }, 1500);
+
+    return sim;
   };
 
   const horizontalCenter = d => {
