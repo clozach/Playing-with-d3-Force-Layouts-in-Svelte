@@ -50,7 +50,7 @@
       .force("y", d3.forceY().y(verticalLevelCenter));
   };
 
-  export function balloonCreator() {
+  function balloonCreator() {
     const templateBalloon = document.getElementsByClassName(
       "template-balloon"
     )[0];
