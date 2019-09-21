@@ -9,6 +9,7 @@
   } from "./FieldFunctions.svelte";
   import { forceSimulation } from "d3";
   import { initialBalloons } from "./DataSource.svelte";
+  import { pickOne } from "./ArrayHelpers.svelte";
 
   let width;
   let height;
@@ -26,7 +27,6 @@
   };
 
   const addNewBalloon = () => {
-    const pickOne = arr => arr[~~(Math.random() * arr.length)];
     const newBalloon = {
       id: `${Math.random()}`,
       height: pickOne(Object.keys(levelMap))
