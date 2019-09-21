@@ -8,14 +8,22 @@
     mergeNewData
   } from "./FieldFunctions.svelte";
   import { forceSimulation } from "d3";
+  import { keypress } from "keypress.js";
   import { initialBalloons } from "./DataSource.svelte";
   import { pickOne } from "./ArrayHelpers.svelte";
+  import KeyHint from "./KeyHint.svelte";
 
   let width;
   let height;
 
   var simulation; // Set after mount
   let datasource = initialBalloons;
+
+  const startup = () => {
+    new keypress.Listener().simple_combo("n", addNewBalloon);
+
+    startSimulation();
+  };
 
   const startSimulation = () => {
     if (!simulation) {
@@ -36,11 +44,14 @@
     startSimulation();
   };
 
-  onMount(startSimulation);
+  onMount(startup);
 </script>
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
 
-<button on:click={addNewBalloon}>➕🎈Add Balloon (⌘N)</button>
+<button on:click={addNewBalloon}>
+  ➕🎈Add Balloon
+  <KeyHint label="[N]" />
+</button>
 
 <Field bind:width bind:height />
