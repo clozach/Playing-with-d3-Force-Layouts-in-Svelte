@@ -8,6 +8,9 @@
   let width;
   let height;
 
+  var simulation; // Set after mount
+  let datasource = initialBalloons;
+
   // Remember, SVG origin is at the top left, so top is 0.1
   const levelMap = {
     top: 0.1,
@@ -15,11 +18,6 @@
     middle: 0.5,
     down: 0.7,
     bottom: 0.9
-  };
-
-  const setInitialPositions = balloons => {
-    balloons.attr("fx", d => (d.fx = -100));
-    balloons.attr("fy", d => (d.fy = 0.8 * height));
   };
 
   const drop = balloons => {
@@ -32,43 +30,6 @@
         d.fy = null;
       }, i * (totalDuration / count));
     });
-
-    balloons
-      .selectAll("g")
-      .transition()
-      .duration(1000)
-      .ease(d3.easeSinIn)
-      .attrTween("transform", function(d) {
-        var i = d3.interpolate(0.5, 1);
-        return function(t) {
-          return `scale(${i(t)})`;
-        };
-      });
-  };
-
-  /**
-   * d3 Combination: binds the given data to Svelte-rendered svgs &
-   * returns the equivalent selection.
-   */
-  const bindAndSelectBalloons = (rootSVG, data) => {
-    return rootSVG
-      .select("g")
-      .selectAll("svg") // Selects all the <svg>'s under <g>
-      .data(data); // Binds the data to those nodes for use during rendering
-  };
-
-  export const createSimulation = data => {
-    const sim = d3
-      .forceSimulation()
-      .alphaDecay(0.007) // Arrived at by trial and error
-      .nodes(data);
-
-    // Give the sim some time without decay, then…decay.
-    d3.timeout(() => {
-      sim.alphaDecay(0.0228); // Roughly the default value according to: https://github.com/d3/d3-force
-    }, 1500);
-
-    return sim;
   };
 
   const horizontalCenter = d => {
@@ -83,39 +44,88 @@
    * Configures the simulation with the forces that position the balloons in their final resting place.
    */
   const setSimulationForces = sim => {
-    sim
+    return sim
       .force("collisions", d3.forceCollide().radius(30))
       .force("x", d3.forceX().x(horizontalCenter))
       .force("y", d3.forceY().y(verticalLevelCenter));
   };
 
-  const setUpD3 = () => {
-    const svg = d3.select("svg");
-    const selectedBalloons = bindAndSelectBalloons(svg, initialBalloons);
+  export function balloonCreator() {
+    const templateBalloon = document.getElementsByClassName(
+      "template-balloon"
+    )[0];
 
-    const simulation = createSimulation(initialBalloons);
-    setInitialPositions(selectedBalloons);
-    setSimulationForces(simulation);
+    // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
+    var clone = templateBalloon.cloneNode(true);
+    clone.getElementsByTagName("text")[0].innerHTML = this.__data__.height; // UGH
+    clone.classList.toggle("template-balloon");
+    return clone;
+  }
+
+  function mergeNewData(selection, data) {
+    return selection
+      .data(data, d => d.id)
+      .join(
+        enter =>
+          enter
+            .append(balloonCreator)
+            .attr("fx", d => (d.fx = -100))
+            .attr("fy", d => (d.fy = 0.8 * height)),
+        update => update,
+        exit => exit
+      );
+  }
+
+  function runSim(sim, selection, data) {
+    // Without this, the simulation will have no more "energy" when
+    // balloons get added after the first run.
+    sim.alpha(1);
+
+    sim.nodes(data);
 
     // This function works with `on("tick",…)` to ensure we only
     // call `drop` on the very first tick.
     var dropper = () => {
-      drop(selectedBalloons);
+      drop(selection);
     };
 
-    simulation.on("tick", () => {
+    sim.on("tick", () => {
       //update balloon positions to reflect node updates on each tick of the simulation
-      selectedBalloons.attr("x", d => d.x);
-      selectedBalloons.attr("y", d => d.y);
+      selection.attr("x", d => d.x);
+      selection.attr("y", d => d.y);
 
       if (dropper) {
         dropper();
         dropper = null;
       }
     });
+
+    sim.restart();
+  }
+  const startSimulation = () => {
+    if (!simulation) {
+      simulation = setSimulationForces(d3.forceSimulation());
+    }
+
+    const g = d3.select("#balloon-group");
+    const balloons = g.selectAll("svg");
+
+    const merged = mergeNewData(balloons, datasource);
+    runSim(simulation, merged, datasource);
   };
 
-  onMount(setUpD3);
+  const addNewBalloon = () => {
+    const pickOne = arr => arr[~~(Math.random() * arr.length)];
+    const newBalloon = {
+      id: `${Math.random()}`,
+      height: pickOne(Object.keys(levelMap))
+    };
+
+    datasource = datasource.concat(newBalloon);
+    startSimulation();
+  };
+
+  onMount(startSimulation);
 </script>
 
 <style>
@@ -132,13 +142,16 @@
 </style>
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
+
+<button on:click={addNewBalloon}>➕🎈Add Balloon (⌘N)</button>
+
 <svg>
-  <g class="nodes">
-    {#each initialBalloons as d}
-      <Balloon id={d.id} />
-    {/each}
-    }
-  </g>
+  <g id="balloon-group" />
+  <defs>
+    <g id="empty-balloon">
+      <Balloon />
+    </g>
+  </defs>
   {#if !!gridlines}
     <Gridlines {width} {height} />
   {/if}
