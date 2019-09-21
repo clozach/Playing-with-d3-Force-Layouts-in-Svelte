@@ -100,9 +100,7 @@
     // This function works with `on("tick",…)` to ensure we only
     // call `drop` on the very first tick.
     var dropper = () => {
-      d3.timeout(() => {
-        drop(selectedBalloons);
-      }, 1000);
+      drop(selectedBalloons);
     };
 
     simulation.on("tick", () => {
