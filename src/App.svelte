@@ -3,12 +3,11 @@
   import Field from "./Field.svelte";
   import {
     levelMap,
-    drop,
-    balloonCreator,
     runSim,
-    setSimulationForces
+    setSimulationForces,
+    mergeNewData
   } from "./FieldFunctions.svelte";
-  import { timeout, forceSimulation, select } from "d3";
+  import { forceSimulation } from "d3";
   import { initialBalloons } from "./DataSource.svelte";
 
   let width;
@@ -17,29 +16,12 @@
   var simulation; // Set after mount
   let datasource = initialBalloons;
 
-  function mergeNewData(selection, data, height) {
-    return selection
-      .data(data, d => d.id)
-      .join(
-        enter =>
-          enter
-            .append(balloonCreator)
-            .attr("fx", d => (d.fx = -100))
-            .attr("fy", d => (d.fy = 0.8 * height)),
-        update => update,
-        exit => exit
-      );
-  }
-
   const startSimulation = () => {
     if (!simulation) {
       simulation = setSimulationForces(forceSimulation(), width, height);
     }
 
-    const g = select("#balloon-group");
-    const balloons = g.selectAll("svg");
-
-    const merged = mergeNewData(balloons, datasource, height);
+    const merged = mergeNewData(datasource, height);
     runSim(simulation, merged, datasource);
   };
 

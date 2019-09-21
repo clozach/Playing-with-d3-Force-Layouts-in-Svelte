@@ -1,5 +1,5 @@
 <script context="module">
-  import { timeout, forceX, forceY, forceCollide } from "d3";
+  import { select, timeout, forceX, forceY, forceCollide } from "d3";
 
   /**
    * While it's a shame not to be able to write provably-pure functions,
@@ -94,4 +94,21 @@
       .force("x", forceX().x(horizontalCenter))
       .force("y", forceY().y(verticalLevelCenter));
   };
+
+  export function mergeNewData(data, height) {
+    const g = select("#balloon-group");
+    const balloons = g.selectAll("svg");
+
+    return balloons
+      .data(data, d => d.id)
+      .join(
+        enter =>
+          enter
+            .append(balloonCreator)
+            .attr("fx", d => (d.fx = -100))
+            .attr("fy", d => (d.fy = 0.8 * height)),
+        update => update,
+        exit => exit
+      );
+  }
 </script>
