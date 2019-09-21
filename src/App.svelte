@@ -23,18 +23,18 @@
   var simulation; // Set after mount
   let datasource = initialBalloons;
 
-  const horizontalCenter = d => {
-    return width / 2;
-  };
-
-  const verticalLevelCenter = d => {
-    return 0.8 * height * levelMap[d.height];
-  };
-
   /**
    * Configures the simulation with the forces that position the balloons in their final resting place.
    */
-  const setSimulationForces = sim => {
+  const setSimulationForces = (sim, width, height) => {
+    const horizontalCenter = d => {
+      return width / 2;
+    };
+
+    const verticalLevelCenter = d => {
+      return 0.8 * height * levelMap[d.height];
+    };
+
     return sim
       .force("collisions", forceCollide().radius(30))
       .force("x", forceX().x(horizontalCenter))
@@ -57,7 +57,7 @@
 
   const startSimulation = () => {
     if (!simulation) {
-      simulation = setSimulationForces(forceSimulation());
+      simulation = setSimulationForces(forceSimulation(), width, height);
     }
 
     const g = select("#balloon-group");
