@@ -1,5 +1,13 @@
 <script>
   import { onMount } from "svelte";
+  import {
+    timeout,
+    forceSimulation,
+    forceX,
+    forceY,
+    forceCollide,
+    select
+  } from "d3";
   import Balloon from "./Balloon.svelte";
   import { initialBalloons } from "./DataSource.svelte";
   import { gridlines } from "./FeatureToggles.svelte";
@@ -25,7 +33,7 @@
     const totalDuration = 600; // In ms, per usual
 
     balloons.each((d, i) => {
-      d3.timeout(() => {
+      timeout(() => {
         d.fx = null;
         d.fy = null;
       }, i * (totalDuration / count));
@@ -45,9 +53,9 @@
    */
   const setSimulationForces = sim => {
     return sim
-      .force("collisions", d3.forceCollide().radius(30))
-      .force("x", d3.forceX().x(horizontalCenter))
-      .force("y", d3.forceY().y(verticalLevelCenter));
+      .force("collisions", forceCollide().radius(30))
+      .force("x", forceX().x(horizontalCenter))
+      .force("y", forceY().y(verticalLevelCenter));
   };
 
   function balloonCreator() {
@@ -104,10 +112,10 @@
   }
   const startSimulation = () => {
     if (!simulation) {
-      simulation = setSimulationForces(d3.forceSimulation());
+      simulation = setSimulationForces(forceSimulation());
     }
 
-    const g = d3.select("#balloon-group");
+    const g = select("#balloon-group");
     const balloons = g.selectAll("svg");
 
     const merged = mergeNewData(balloons, datasource);
