@@ -12,8 +12,9 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4",
-    "d3": "latest"
+    "d3": "latest",
+    "keypress.js": "^2.1.5",
+    "sirv-cli": "^0.4.4"
   },
   "scripts": {
     "build": "rollup -c",
