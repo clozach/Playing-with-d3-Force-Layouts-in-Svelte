@@ -17,7 +17,7 @@
   var simulation; // Set after mount
   let datasource = initialBalloons;
 
-  function mergeNewData(selection, data) {
+  function mergeNewData(selection, data, height) {
     return selection
       .data(data, d => d.id)
       .join(
@@ -39,7 +39,7 @@
     const g = select("#balloon-group");
     const balloons = g.selectAll("svg");
 
-    const merged = mergeNewData(balloons, datasource);
+    const merged = mergeNewData(balloons, datasource, height);
     runSim(simulation, merged, datasource);
   };
 
