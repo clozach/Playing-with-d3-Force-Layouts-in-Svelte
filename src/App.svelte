@@ -5,16 +5,10 @@
     levelMap,
     drop,
     balloonCreator,
-    runSim
+    runSim,
+    setSimulationForces
   } from "./FieldFunctions.svelte";
-  import {
-    timeout,
-    forceSimulation,
-    forceX,
-    forceY,
-    forceCollide,
-    select
-  } from "d3";
+  import { timeout, forceSimulation, select } from "d3";
   import { initialBalloons } from "./DataSource.svelte";
 
   let width;
@@ -22,24 +16,6 @@
 
   var simulation; // Set after mount
   let datasource = initialBalloons;
-
-  /**
-   * Configures the simulation with the forces that position the balloons in their final resting place.
-   */
-  const setSimulationForces = (sim, width, height) => {
-    const horizontalCenter = d => {
-      return width / 2;
-    };
-
-    const verticalLevelCenter = d => {
-      return 0.8 * height * levelMap[d.height];
-    };
-
-    return sim
-      .force("collisions", forceCollide().radius(30))
-      .force("x", forceX().x(horizontalCenter))
-      .force("y", forceY().y(verticalLevelCenter));
-  };
 
   function mergeNewData(selection, data) {
     return selection

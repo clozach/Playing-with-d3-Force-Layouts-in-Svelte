@@ -1,5 +1,5 @@
 <script context="module">
-  import { timeout } from "d3";
+  import { timeout, forceX, forceY, forceCollide } from "d3";
 
   /**
    * While it's a shame not to be able to write provably-pure functions,
@@ -76,4 +76,22 @@
 
     sim.restart();
   }
+
+  /**
+   * Configures the simulation with the forces that position the balloons in their final resting place.
+   */
+  export const setSimulationForces = (sim, width, height) => {
+    const horizontalCenter = d => {
+      return width / 2;
+    };
+
+    const verticalLevelCenter = d => {
+      return 0.8 * height * levelMap[d.height];
+    };
+
+    return sim
+      .force("collisions", forceCollide().radius(30))
+      .force("x", forceX().x(horizontalCenter))
+      .force("y", forceY().y(verticalLevelCenter));
+  };
 </script>
