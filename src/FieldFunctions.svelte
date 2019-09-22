@@ -50,11 +50,32 @@
     return clone;
   }
 
-  export function runSim(sim, selection, data) {
+  export function runSim(sim, data, { startingX, startingY }) {
+    function selectionFrom(newdata) {
+      const g = select("#balloon-group");
+      const balloons = g.selectAll("svg");
+
+      return balloons
+        .data(newdata, d => d.id)
+        .join(
+          enter =>
+            enter
+              .append(balloonCreator)
+              .attr("fx", d => (d.fx = startingX))
+              .attr("fy", d => (d.fy = startingY)),
+          update => update,
+          exit => exit
+        );
+    }
+
+    const selection = selectionFrom(data);
+
     // Without this, the simulation will have no more "energy" when
     // balloons get added after the first run.
     sim.alpha(1);
 
+    // d3-selection and d3-force are completely independent, so we
+    // need to let the sim know the data's changed, too.
     sim.nodes(data);
 
     // This function works with `on("tick",…)` to ensure we only
@@ -64,7 +85,8 @@
     };
 
     sim.on("tick", () => {
-      //update balloon positions to reflect node updates on each tick of the simulation
+      // Update balloon positions to reflect node updates on each
+      // tick of the simulation
       selection.attr("x", d => d.x);
       selection.attr("y", d => d.y);
 
@@ -94,21 +116,4 @@
       .force("x", forceX().x(horizontalCenter))
       .force("y", forceY().y(verticalLevelCenter));
   };
-
-  export function mergeNewData(data, height) {
-    const g = select("#balloon-group");
-    const balloons = g.selectAll("svg");
-
-    return balloons
-      .data(data, d => d.id)
-      .join(
-        enter =>
-          enter
-            .append(balloonCreator)
-            .attr("fx", d => (d.fx = -100))
-            .attr("fy", d => (d.fy = 0.8 * height)),
-        update => update,
-        exit => exit
-      );
-  }
 </script>

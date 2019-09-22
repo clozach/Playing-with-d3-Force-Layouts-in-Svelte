@@ -2,10 +2,9 @@
   import { onMount } from "svelte";
   import Field from "./Field.svelte";
   import {
-    levelMap,
+    levelMap, // Un-expose this once we're working with real data.
     runSim,
-    setSimulationForces,
-    mergeNewData
+    setSimulationForces
   } from "./FieldFunctions.svelte";
   import { forceSimulation } from "d3";
   import { keypress } from "keypress.js";
@@ -27,11 +26,13 @@
 
   const startSimulation = () => {
     if (!simulation) {
+      // The sim needs the `height` to place the levels
       simulation = setSimulationForces(forceSimulation(), width, height);
     }
-
-    const merged = mergeNewData(datasource, height);
-    runSim(simulation, merged, datasource);
+    runSim(simulation, datasource, {
+      startingX: -100,
+      startingY: height
+    });
   };
 
   const addNewBalloon = () => {
