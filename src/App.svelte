@@ -15,6 +15,11 @@
   let width;
   let height;
 
+  // The sim needs the `height` to place the levels
+  $: {
+    simulation = setSimulationForces(forceSimulation(), width, height);
+    startSimulation();
+  }
   var simulation; // Set after mount
   let datasource = initialBalloons;
 
@@ -25,10 +30,6 @@
   };
 
   const startSimulation = () => {
-    if (!simulation) {
-      // The sim needs the `height` to place the levels
-      simulation = setSimulationForces(forceSimulation(), width, height);
-    }
     runSim(simulation, datasource, {
       startingX: -100,
       startingY: height
