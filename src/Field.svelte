@@ -1,6 +1,7 @@
 <script>
   import Balloon from "./Balloon.svelte";
   import CloudLayer from "./CloudLayer.svelte";
+  import Grass from "./Grass.svelte";
   import { gridlines } from "./FeatureToggles.svelte";
   import Gridlines from "./Gridlines.svelte";
 
@@ -32,4 +33,5 @@
   {#if !!gridlines}
     <Gridlines {width} {height} />
   {/if}
+  <Grass {width} {height} />
 </svg>
