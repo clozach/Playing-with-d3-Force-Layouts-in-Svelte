@@ -108,7 +108,9 @@
     };
 
     const verticalLevelCenter = d => {
-      return 0.8 * height * levelMap[d.height];
+      // Whaddya know. The 0.04 adjustment seems to line the balloons
+      // up perfectly with the grid levels' centers.
+      return height * levelMap[d.height] - 0.04 * height;
     };
 
     return sim
