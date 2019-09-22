@@ -1,8 +1,6 @@
 <script>
   export let x;
   export let y;
-  export let width;
-  export let height;
   export let transform;
 </script>
 
