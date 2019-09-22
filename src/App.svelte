@@ -55,4 +55,4 @@
   <KeyHint label="[N]" />
 </button>
 
-<Field bind:width bind:height />
+<Field {width} {height} />
