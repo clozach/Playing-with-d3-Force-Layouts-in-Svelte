@@ -2,10 +2,11 @@
   import { select, timeout, forceX, forceY, forceCollide } from "d3";
 
   /**
-   * While it's a shame not to be able to write provably-pure functions,
-   * Elm-like, in Svelte, we can at least make it clear which functions
-   * depend exclusively on their arguments, versus those that pull this
-   * kind of shenanigan:
+   * In my ideal world, Svelte would have some clever way of signaling
+   * to the compiler that we expect a function to be pure. Barring
+   * that, we can at least make it clear which functions depend
+   * exclusively on their arguments, versus those that pull this kind
+   * of shenanigan:
    *
    *     var componentVar;
    *     function () { componentVar.modify() }
@@ -14,8 +15,8 @@
    * Svelte component that uses them.
    *
    * (What's the technical term for a function that _can_ modify its
-   * arguments…or, shudder, `this`, but can't access anything else not
-   * explicitly passed through the visible interface?)
+   * arguments…or, shudder, `this`, but can't modify anything else in
+   * its calling context?)
    */
   // Remember, SVG origin is at the top left, so top is 0.1
   export const levelMap = {
@@ -79,7 +80,7 @@
     sim.nodes(data);
 
     // This function works with `on("tick",…)` to ensure we only
-    // call `drop` on the very first tick.
+    // call `drop` on the very first tick per simulation run.
     var dropper = () => {
       drop(selection);
     };
