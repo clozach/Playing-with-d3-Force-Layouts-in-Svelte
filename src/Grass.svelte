@@ -34,6 +34,8 @@
   }
 </script>
 
-{#each integers(1, tuftCount) as i}
-  <GrassTuft x={x(i)} {y} transform={flipPercentageOfBalloons(0.2)} />
-{/each}
+<g id="grass-group">
+  {#each integers(1, tuftCount) as i}
+    <GrassTuft x={x(i)} {y} transform={flipPercentageOfBalloons(0.2)} />
+  {/each}
+</g>

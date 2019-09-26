@@ -26,9 +26,11 @@
   };
 </script>
 
-{#each integers(1, cloudCount) as i}
-  <Cloud
-    x={-cloudMargin + (i - 1) * (cloudWidth - 2 * cloudMargin)}
-    y={cloudZoneHeight * Math.random()}
-    transform={flipPercentageOfBalloons(0.2)} />
-{/each}
+<g id="cloud-group">
+  {#each integers(1, cloudCount) as i}
+    <Cloud
+      x={-cloudMargin + (i - 1) * (cloudWidth - 2 * cloudMargin)}
+      y={cloudZoneHeight * Math.random()}
+      transform={flipPercentageOfBalloons(0.2)} />
+  {/each}
+</g>
