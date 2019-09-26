@@ -3,6 +3,10 @@
 
   // https://stackoverflow.com/a/10050831/230615
   export const integers = (lowEnd, highEnd) => {
-    return [...Array(highEnd - lowEnd + 1).keys()].map(i => i + lowEnd);
+    if (highEnd < Infinity && highEnd > lowEnd) {
+      return [...Array(highEnd - lowEnd + 1).keys()].map(i => i + lowEnd);
+    } else {
+      return [];
+    }
   };
 </script>
