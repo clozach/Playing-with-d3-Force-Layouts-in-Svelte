@@ -3,6 +3,10 @@
   export let y;
   export let transform;
 
+  // Unable to get transforms to work properly with this multi-
+  // path shape, I punted and did the flip in Figma before exporting.
+  // This `coinFlip` determines which of the two exported `<svg>`s
+  // gets rendered.
   const coinFlip = Math.random() > 0.5;
 </script>
 

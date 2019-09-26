@@ -18,6 +18,11 @@
   $: cloudZoneHeight = cloudHeight * cloudHeightMultiplier;
   $: cloudCount = Math.ceil(width / cloudWidth) + 2; // Not sure why "+2, but it seems to work!"
 
+  // Returns a horizontal flip transform `perc` percent of the time,
+  // where `perc` is a value between 0 and 1.
+  //
+  // This is the simplest way I could think to keep the clouds from
+  // looking too repetetive.
   const flipPercentageOfBalloons = perc => {
     const flipHorizontal = cw => {
       return `scale(-1,1) translate(-${cw},0)`;
