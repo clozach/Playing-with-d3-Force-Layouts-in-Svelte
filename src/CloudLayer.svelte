@@ -23,7 +23,7 @@
   // Adjust these until the clouds form a desirable pattern
   $: cloudMargin = cloudWidth ? 0.1 * cloudWidth : 0; // %ge negative margin on either side.
 
-  $: cloudCount = Math.ceil(width / cloudWidth);
+  $: cloudCount = Math.ceil(width / (cloudWidth - 2 * cloudMargin));
 
   // Returns a horizontal flip transform `perc` percent of the time,
   // where `perc` is a value between 0 and 1.
