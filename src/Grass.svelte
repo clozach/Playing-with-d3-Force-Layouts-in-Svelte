@@ -1,41 +1,60 @@
 <script>
   import { integers } from "./ArrayHelpers.svelte";
-  import { scaleLinear } from "d3-scale";
   import GrassTuft from "./GrassTuft.svelte";
 
-  export let width;
-  export let height;
+  export let width = 0;
+  export let height = 0;
 
-  let tuftWidth = 100; // Based on dimensions in Figma
-  let tuftHeight = 98;
+  let cloudHeight = 0;
+  let cloudWidth = 0;
+  let cloudMargin = 0;
 
-  // Adjust these until the tufts form a desirable pattern
-  let tuftMargin = tuftWidth ? 0.1 * tuftWidth : 0; // %ge negative margin on either side.
-  const tuftHeightMultiplier = 0.1; // 1 == zone twice the height of the grass)
+  const rawWidth = 100; // Original cloud width in Figma
+  const rawHeight = 98; // Original cloud height in Figma
+  const cloudWidthOverCloudHeight = rawWidth / rawHeight;
+  const layerHeightOverViewHeight = 1 / 10;
+  const cloudHeightMultiplier = 1;
 
-  let scale = scaleLinear().range(-tuftMargin, width + tuftMargin);
+  $: layerHeight = height * layerHeightOverViewHeight;
+  $: cloudHeight = layerHeight / cloudHeightMultiplier;
+  $: cloudWidth = cloudHeight * cloudWidthOverCloudHeight;
+  $: cloudScale = cloudHeight / rawHeight;
 
-  $: tuftZoneHeight = tuftHeight * tuftHeightMultiplier;
-  $: tuftCount = Math.ceil(width / tuftWidth) + 10; // Not sure why "+10, but it seems to work!"
+  // Adjust these until the clouds form a desirable pattern
+  $: cloudMargin = cloudWidth ? 0.1 * cloudWidth : 0; // %ge negative margin on either side.
 
-  const flipPercentageOfBalloons = perc => {
-    const flipHorizontal = gw => {
-      return `scale(-1,1) translate(-${gw},0)`;
+  $: cloudCount = Math.ceil(width / (cloudWidth - 2 * cloudMargin));
+
+  // Returns a horizontal flip transform `perc` percent of the time,
+  // where `perc` is a value between 0 and 1.
+  //
+  // This is the simplest way I could think to keep the clouds from
+  // looking too repetetive.
+  const flipPercentageOfClouds = perc => {
+    const flipHorizontal = cw => {
+      return `scale(-1,1) translate(-${cw},0)`;
     };
-    return Math.random() > 0.5 ? flipHorizontal(tuftWidth) : "";
+    return Math.random() > 0.2 ? flipHorizontal(cloudWidth) : "";
   };
 
-  $: y = height - 0.9 * tuftHeight - tuftZoneHeight * Math.random();
+  const x = (margin, idx, itemWidth) => {
+    return idx * (itemWidth - 2 * margin) - margin;
+  };
 
-  function x(i) {
-    return (
-      -tuftMargin + (i - 1) * (tuftWidth - 2 * tuftMargin) + 30 * Math.random()
-    );
-  }
+  const y = (viewHeight, itemHeight) => {
+    return viewHeight - itemHeight;
+  };
+
+  const transform = (percentToFlip, scale) => {
+    return `${flipPercentageOfClouds(percentToFlip)} scale(${scale})`;
+  };
 </script>
 
-<g id="grass-group">
-  {#each integers(1, tuftCount) as i}
-    <GrassTuft x={x(i)} {y} transform={flipPercentageOfBalloons(0.2)} />
+<g id="cloud-group">
+  {#each integers(0, cloudCount) as i}
+    <GrassTuft
+      x={x(cloudMargin, i, cloudWidth)}
+      y={y(height, cloudHeight)}
+      transform={transform(0.5, cloudScale)} />
   {/each}
 </g>
