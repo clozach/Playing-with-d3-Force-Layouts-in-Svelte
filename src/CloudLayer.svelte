@@ -1,60 +1,34 @@
 <script>
   import { integers } from "./ArrayHelpers.svelte";
+  import { xyt } from "./HorizontalRepeater.svelte";
   import Cloud from "./Cloud.svelte";
 
   export let width = 0;
   export let height = 0;
 
-  let cloudHeight = 0;
-  let cloudWidth = 0;
-  let cloudMargin = 0;
+  const config = {
+    defaultItemWidth: 204, // Original cloud width in Figma
+    defaultItemHeight: 114, // Original cloud width in Figma
+    layerHeightOverViewHeight: 2 / 10,
+    verticalSlack: 1.3
+  };
 
-  const rawWidth = 204; // Original cloud width in Figma
-  const rawHeight = 114; // Original cloud height in Figma
-  const cloudWidthOverCloudHeight = rawWidth / rawHeight;
-  const layerHeightOverViewHeight = 2 / 10;
-  const cloudHeightMultiplier = 1.3;
+  $: positioner = xyt(width, height, config);
 
-  $: layerHeight = height * layerHeightOverViewHeight;
-  $: cloudHeight = layerHeight / cloudHeightMultiplier;
-  $: cloudWidth = cloudHeight * cloudWidthOverCloudHeight;
-  $: cloudScale = cloudHeight / rawHeight;
-
-  // Adjust these until the clouds form a desirable pattern
-  $: cloudMargin = cloudWidth ? 0.1 * cloudWidth : 0; // %ge negative margin on either side.
-
-  $: cloudCount = Math.ceil(width / (cloudWidth - 2 * cloudMargin));
-
-  // Returns a horizontal flip transform `perc` percent of the time,
-  // where `perc` is a value between 0 and 1.
+  // My first approach was to inline the count like so:
   //
-  // This is the simplest way I could think to keep the clouds from
-  // looking too repetetive.
-  const flipPercentageOfClouds = perc => {
-    const flipHorizontal = cw => {
-      return `scale(-1,1) translate(-${cw},0)`;
-    };
-    return Math.random() > 0.2 ? flipHorizontal(cloudWidth) : "";
-  };
-
-  const x = (margin, idx, itemWidth) => {
-    return idx * (itemWidth - 2 * margin) - margin;
-  };
-
-  const y = (maxHeight, itemHeight) => {
-    return (maxHeight - itemHeight) * Math.random();
-  };
-
-  const transform = (percentToFlip, scale) => {
-    return `${flipPercentageOfClouds(percentToFlip)} scale(${scale})`;
-  };
+  //    {#each integers(0, positioner.cloudCount()) as i}
+  //
+  // but it turns out that's not reactive, and so you end up with a
+  // count stuck at 0 (because the pre-mounted width is, well, 0).
+  $: count = positioner.count;
 </script>
 
 <g id="cloud-group">
-  {#each integers(0, cloudCount) as i}
+  {#each integers(0, count()) as i}
     <Cloud
-      x={x(cloudMargin, i, cloudWidth)}
-      y={y(layerHeight, cloudHeight)}
-      transform={transform(0.2, cloudScale)} />
+      x={positioner.x(i)}
+      y={positioner.y()}
+      transform={positioner.transform()} />
   {/each}
 </g>
