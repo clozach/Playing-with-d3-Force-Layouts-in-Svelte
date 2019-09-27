@@ -1,6 +1,7 @@
 <script>
   import { integers } from "./ArrayHelpers.svelte";
   import { xyt } from "./HorizontalRepeater.svelte";
+  import { grassHeight } from "./FieldFunctions.svelte";
   import GrassTuft from "./GrassTuft.svelte";
 
   export let width = 0;
@@ -9,7 +10,7 @@
   const config = {
     defaultItemWidth: 100, // Original tuft width in Figma
     defaultItemHeight: 98, // Original tuft width in Figma
-    layerHeightOverViewHeight: 1 / 10,
+    layerHeightOverViewHeight: grassHeight,
     verticalSlack: 1,
     alignTop: false
   };

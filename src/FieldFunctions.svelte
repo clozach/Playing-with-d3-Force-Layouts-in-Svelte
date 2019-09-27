@@ -27,6 +27,9 @@
     bottom: 0.9
   };
 
+  export const grassHeight = 1 / 10; // Of total height
+  export const cloudLayerHeight = 2 / 10; // Of total height
+
   export const drop = balloons => {
     const count = balloons._groups[0].length;
     const totalDuration = 600; // In ms, per usual

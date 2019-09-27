@@ -1,6 +1,7 @@
 <script>
   import { integers } from "./ArrayHelpers.svelte";
   import { xyt } from "./HorizontalRepeater.svelte";
+  import { cloudLayerHeight } from "./FieldFunctions.svelte";
   import Cloud from "./Cloud.svelte";
 
   export let width = 0;
@@ -9,7 +10,7 @@
   const config = {
     defaultItemWidth: 204, // Original cloud width in Figma
     defaultItemHeight: 114, // Original cloud width in Figma
-    layerHeightOverViewHeight: 2 / 10,
+    layerHeightOverViewHeight: cloudLayerHeight,
     verticalSlack: 1.3
   };
 
