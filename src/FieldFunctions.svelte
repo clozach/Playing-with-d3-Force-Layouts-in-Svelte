@@ -1,5 +1,12 @@
 <script context="module">
-  import { select, timeout, forceX, forceY, forceCollide } from "d3";
+  import {
+    transition,
+    select,
+    timeout,
+    forceX,
+    forceY,
+    forceCollide
+  } from "d3";
 
   /**
    * In my ideal world, Svelte would have some clever way of signaling
@@ -59,17 +66,24 @@
       const g = select("#balloon-group");
       const balloons = g.selectAll("svg");
 
+      const entr = enter => {
+        const e = enter
+          .append(balloonCreator)
+          .attr("fx", d => (d.fx = startingX))
+          .attr("fy", d => (d.fy = startingY));
+
+        e.selectAll("g")
+          .attr("transform", "scale(20)")
+          .transition()
+          .duration(1250)
+          .attr("transform", "scale(1)");
+
+        return e;
+      };
+
       return balloons
         .data(newdata, d => d.id)
-        .join(
-          enter =>
-            enter
-              .append(balloonCreator)
-              .attr("fx", d => (d.fx = startingX))
-              .attr("fy", d => (d.fy = startingY)),
-          update => update,
-          exit => exit
-        );
+        .join(entr, update => update, exit => exit);
     }
 
     const selection = selectionFrom(data);

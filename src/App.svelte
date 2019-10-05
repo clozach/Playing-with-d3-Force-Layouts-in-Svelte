@@ -31,8 +31,9 @@
 
   const startSimulation = () => {
     runSim(simulation, datasource, {
-      startingX: -100,
-      startingY: height
+      startingX: 0,
+      startingY: 0,
+      transform: "scale(20)"
     });
   };
 
