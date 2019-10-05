@@ -50,11 +50,25 @@
   onMount(startup);
 </script>
 
-<svelte:window bind:innerWidth={width} bind:innerHeight={height} />
+<style>
+  #ui-layer {
+    width: 100%;
+    height: 100%;
+  }
 
-<button on:click={addNewBalloon}>
-  ➕🎈Add Balloon
-  <KeyHint label="[N]" />
-</button>
+  button {
+    margin: 1rem;
+  }
+</style>
+
+<svelte:window bind:innerWidth={width} bind:innerHeight={height} />
+<div id="ui-layer">
+  <button on:click={addNewBalloon}>
+    ➕🎈Add Balloon
+    <KeyHint label="[N]" />
+  </button>
+</div>
+
+<FormEditor />
 
 <Field {width} {height} />
