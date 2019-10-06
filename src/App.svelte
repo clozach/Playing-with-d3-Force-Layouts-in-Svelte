@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Field from "./Field.svelte";
+  import FormEditor from "./FormEditor.svelte";
   import {
     levelMap, // Un-expose this once we're working with real data.
     runSim,
@@ -14,6 +15,7 @@
 
   let width;
   let height;
+  let selectedBalloon = null;
 
   // The sim needs the `height` to place the levels
   $: {
@@ -31,20 +33,17 @@
 
   const startSimulation = () => {
     runSim(simulation, datasource, {
-      startingX: 0,
+      startingX: width / 2,
       startingY: 0,
       transform: "scale(20)"
     });
   };
 
   const addNewBalloon = () => {
-    const newBalloon = {
+    selectedBalloon = {
       id: `${Math.random()}`,
       height: pickOne(Object.keys(levelMap))
     };
-
-    datasource = datasource.concat(newBalloon);
-    startSimulation();
   };
 
   onMount(startup);
@@ -69,6 +68,6 @@
   </button>
 </div>
 
-<FormEditor />
+<FormEditor {selectedBalloon} />
 
 <Field {width} {height} />

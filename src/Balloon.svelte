@@ -1,5 +1,14 @@
-<svg class="template-balloon" fill="#f0c0c0" xmlns="http://www.w3.org/2000/svg">
-  <g id="Small Balloon Shape">
+<script>
+  export let text = "Placeholder";
+  export let transform = "scale(1)";
+</script>
+
+<svg
+  overflow="visible"
+  class="template-balloon"
+  fill="#f0c0c0"
+  xmlns="http://www.w3.org/2000/svg">
+  <g {transform} id="Small Balloon Shape">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -29,7 +38,7 @@
       0.194645 27.3897Z"
       fill="url(#paint0_radial)"
       fill-opacity="0.5" />
-    <text x="5" y="30" font-size=".7rem">Placeholder</text>
+    <text x="5" y="30" font-size=".7rem">{text}</text>
   </g>
   <defs>
     <radialGradient
