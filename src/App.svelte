@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { debug } from "./FeatureToggles.svelte";
   import Field from "./Field.svelte";
   import FormEditor from "./FormEditor.svelte";
   import {
@@ -68,6 +69,6 @@
   </button>
 </div>
 
-<FormEditor {selectedBalloon} />
+<FormEditor {debug} {selectedBalloon} />
 
 <Field {width} {height} />

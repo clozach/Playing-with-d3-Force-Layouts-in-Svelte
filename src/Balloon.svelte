@@ -1,6 +1,16 @@
+<script context="module">
+  export const balloonWidth = 44; // As currently measured in Chrome. 😬
+  export const balloonHeight = 56; // As currently measured in Chrome. 😬
+</script>
+
 <script>
+  export let debug = false;
+  // debug = true;
+
   export let text = "Placeholder";
-  export let transform = "scale(1)";
+  export let scale = "2";
+
+  const textMargin = 5;
 </script>
 
 <svg
@@ -8,7 +18,7 @@
   class="template-balloon"
   fill="#f0c0c0"
   xmlns="http://www.w3.org/2000/svg">
-  <g {transform} id="Small Balloon Shape">
+  <g transform="scale({scale})" id="Small Balloon Shape">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -39,6 +49,14 @@
       fill="url(#paint0_radial)"
       fill-opacity="0.5" />
     <text x="5" y="30" font-size=".7rem">{text}</text>
+    {#if debug}
+      <rect
+        x={textMargin}
+        y={textMargin * 2}
+        width="{balloonWidth - 2 * textMargin}px"
+        height="{balloonWidth - 2 * textMargin}px"
+        fill="#eecc0050" />
+    {/if}
   </g>
   <defs>
     <radialGradient
