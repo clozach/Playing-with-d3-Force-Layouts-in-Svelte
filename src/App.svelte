@@ -27,7 +27,6 @@
   $: {
     // The sim needs the `height` to place the levels
     entrySimulation = setSimulationForces(forceSimulation(), width, height);
-    runEntrySimulation(entrySimulation, model, height);
   }
 
   const addNewBalloon = () => {
@@ -35,9 +34,7 @@
     runEntrySimulation(entrySimulation, model, height);
   };
 
-  const startup = () => {
-    runEntrySimulation(entrySimulation, model, height);
-  };
+  const startup = () => {};
 
   /* -------------------------------------------------------------- */
   /*                             RUNTIME                            */
