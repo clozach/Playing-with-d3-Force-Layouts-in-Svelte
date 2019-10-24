@@ -54,7 +54,14 @@
     return clone;
   }
 
-  export function runSim(sim, data, { startingX, startingY }) {
+  export const startSimulation = (sim, data, height) => {
+    runSim(sim, data, {
+      startingX: -100,
+      startingY: height
+    });
+  };
+
+  function runSim(sim, data, { startingX, startingY }) {
     function selectionFrom(newdata) {
       const g = select("#balloon-group");
       const balloons = g.selectAll("svg");

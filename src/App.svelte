@@ -3,7 +3,7 @@
   import Field from "./Field.svelte";
   import {
     levelMap, // Un-expose this once we're working with real data.
-    runSim,
+    startSimulation,
     setSimulationForces
   } from "./FieldFunctions.svelte";
   import { forceSimulation } from "d3";
@@ -27,13 +27,6 @@
     new keypress.Listener().simple_combo("n", addNewBalloon);
 
     startSimulation(simulation, datasource, height);
-  };
-
-  const startSimulation = (sim, data, h) => {
-    runSim(sim, data, {
-      startingX: -100,
-      startingY: h
-    });
   };
 
   const addNewBalloon = () => {
