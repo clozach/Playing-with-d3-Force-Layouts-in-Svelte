@@ -1,5 +1,6 @@
 <script context="module">
   import { select, timeout, forceX, forceY, forceCollide } from "d3";
+  import { pickOne } from "./ArrayHelpers.svelte";
 
   /**
    * In my ideal world, Svelte would have some clever way of signaling
@@ -40,6 +41,13 @@
         d.fy = null;
       }, i * (totalDuration / count));
     });
+  };
+
+  export const newBalloonData = () => {
+    return {
+      id: `${Math.random()}`,
+      height: pickOne(Object.keys(levelMap))
+    };
   };
 
   export function balloonCreator() {

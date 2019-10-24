@@ -4,12 +4,12 @@
   import {
     levelMap, // Un-expose this once we're working with real data.
     startSimulation,
-    setSimulationForces
+    setSimulationForces,
+    newBalloonData
   } from "./FieldFunctions.svelte";
   import { forceSimulation } from "d3";
   import { keypress } from "keypress.js";
   import { initialBalloons } from "./DataSource.svelte";
-  import { pickOne } from "./ArrayHelpers.svelte";
   import KeyHint from "./KeyHint.svelte";
 
   let width;
@@ -30,12 +30,7 @@
   };
 
   const addNewBalloon = () => {
-    const newBalloon = {
-      id: `${Math.random()}`,
-      height: pickOne(Object.keys(levelMap))
-    };
-
-    datasource = datasource.concat(newBalloon);
+    datasource = datasource.concat(newBalloonData());
     startSimulation(simulation, datasource, height);
   };
 
