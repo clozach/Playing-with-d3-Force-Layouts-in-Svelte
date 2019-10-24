@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { forceSimulation } from "d3";
   import Field from "./Field.svelte";
   import {
     levelMap, // Un-expose this once we're working with real data.
@@ -7,32 +8,43 @@
     setSimulationForces,
     newBalloonData
   } from "./FieldFunctions.svelte";
-  import { forceSimulation } from "d3";
   import { keypress } from "keypress.js";
   import { initialBalloons } from "./DataSource.svelte";
   import KeyHint from "./KeyHint.svelte";
 
+  /* -------------------------------------------------------------- */
+  /*                              MODEL                             */
+  /* -------------------------------------------------------------- */
+
+  let model = initialBalloons;
+  let simulation; // Resets whenever the window width & height refresh
   let width;
   let height;
 
-  // The sim needs the `height` to place the levels
+  /* -------------------------------------------------------------- */
+  /*                            BINDINGS                            */
+  /* -------------------------------------------------------------- */
+
   $: {
+    // The sim needs the `height` to place the levels
     simulation = setSimulationForces(forceSimulation(), width, height);
-    startSimulation(simulation, datasource, height);
+    startSimulation(simulation, model, height);
   }
-  var simulation; // Set after mount
-  let datasource = initialBalloons;
+
+  const addNewBalloon = () => {
+    model = model.concat(newBalloonData());
+    startSimulation(simulation, model, height);
+  };
 
   const startup = () => {
     new keypress.Listener().simple_combo("n", addNewBalloon);
 
-    startSimulation(simulation, datasource, height);
+    startSimulation(simulation, model, height);
   };
 
-  const addNewBalloon = () => {
-    datasource = datasource.concat(newBalloonData());
-    startSimulation(simulation, datasource, height);
-  };
+  /* -------------------------------------------------------------- */
+  /*                             RUNTIME                            */
+  /* -------------------------------------------------------------- */
 
   onMount(startup);
 </script>
