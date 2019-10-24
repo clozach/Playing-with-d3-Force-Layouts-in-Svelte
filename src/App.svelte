@@ -2,15 +2,14 @@
   import { onMount } from "svelte";
   import { forceSimulation } from "d3";
   import Field from "./Field.svelte";
+  import AccessibleButton from "./AccessibleButton.svelte";
   import {
     levelMap, // Un-expose this once we're working with real data.
     startSimulation,
     setSimulationForces,
     newBalloonData
   } from "./FieldFunctions.svelte";
-  import { keypress } from "keypress.js";
   import { initialBalloons } from "./DataSource.svelte";
-  import KeyHint from "./KeyHint.svelte";
 
   /* -------------------------------------------------------------- */
   /*                              MODEL                             */
@@ -37,8 +36,6 @@
   };
 
   const startup = () => {
-    new keypress.Listener().simple_combo("n", addNewBalloon);
-
     startSimulation(simulation, model, height);
   };
 
@@ -51,9 +48,9 @@
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
 
-<button on:click={addNewBalloon}>
-  ➕🎈Add Balloon
-  <KeyHint label="[N]" />
-</button>
+<AccessibleButton
+  label="➕🎈Add Balloon"
+  keyboardTrigger="n"
+  action={addNewBalloon} />
 
 <Field {width} {height} />
