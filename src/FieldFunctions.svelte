@@ -62,7 +62,7 @@
     return clone;
   }
 
-  export const startSimulation = (sim, data, height) => {
+  export const runEntrySimulation = (sim, data, height) => {
     runSim(sim, data, {
       startingX: -100,
       startingY: height

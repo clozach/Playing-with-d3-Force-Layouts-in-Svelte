@@ -5,7 +5,7 @@
   import AccessibleButton from "./AccessibleButton.svelte";
   import {
     levelMap, // Un-expose this once we're working with real data.
-    startSimulation,
+    runEntrySimulation,
     setSimulationForces,
     newBalloonData
   } from "./FieldFunctions.svelte";
@@ -16,7 +16,7 @@
   /* -------------------------------------------------------------- */
 
   let model = initialBalloons;
-  let simulation; // Resets whenever the window width & height refresh
+  let entrySimulation; // Resets whenever the window width & height refresh
   let width;
   let height;
 
@@ -26,17 +26,17 @@
 
   $: {
     // The sim needs the `height` to place the levels
-    simulation = setSimulationForces(forceSimulation(), width, height);
-    startSimulation(simulation, model, height);
+    entrySimulation = setSimulationForces(forceSimulation(), width, height);
+    runEntrySimulation(entrySimulation, model, height);
   }
 
   const addNewBalloon = () => {
     model = model.concat(newBalloonData());
-    startSimulation(simulation, model, height);
+    runEntrySimulation(entrySimulation, model, height);
   };
 
   const startup = () => {
-    startSimulation(simulation, model, height);
+    runEntrySimulation(entrySimulation, model, height);
   };
 
   /* -------------------------------------------------------------- */
