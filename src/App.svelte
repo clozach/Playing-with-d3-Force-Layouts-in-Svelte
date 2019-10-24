@@ -18,7 +18,7 @@
   // The sim needs the `height` to place the levels
   $: {
     simulation = setSimulationForces(forceSimulation(), width, height);
-    startSimulation();
+    startSimulation(simulation, datasource, height);
   }
   var simulation; // Set after mount
   let datasource = initialBalloons;
@@ -26,13 +26,13 @@
   const startup = () => {
     new keypress.Listener().simple_combo("n", addNewBalloon);
 
-    startSimulation();
+    startSimulation(simulation, datasource, height);
   };
 
-  const startSimulation = () => {
-    runSim(simulation, datasource, {
+  const startSimulation = (sim, data, h) => {
+    runSim(sim, data, {
       startingX: -100,
-      startingY: height
+      startingY: h
     });
   };
 
@@ -43,7 +43,7 @@
     };
 
     datasource = datasource.concat(newBalloon);
-    startSimulation();
+    startSimulation(simulation, datasource, height);
   };
 
   onMount(startup);
