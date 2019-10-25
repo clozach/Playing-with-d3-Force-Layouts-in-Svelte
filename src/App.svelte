@@ -23,14 +23,14 @@
   let width;
   let height;
 
-  let alphaTarget = 0;
-  let alphaMin = 0.001;
-  let alphaDecay = 0.0228;
-  let velocityDecay = 0.4;
-  let collisionStrength = 1;
-  let positionStrength = 0.9;
-  let iterations = 9;
-  let startingAlpha = 0.07;
+  let fieldAlphaTarget = 0;
+  let fieldAlphaMin = 0.001;
+  let fieldAlphaDeca = 0.0228;
+  let fieldVelocityDecay = 0.4;
+  let fieldCollisionStrength = 1;
+  let fieldCositionStrength = 0.9;
+  let fieldIterations = 9;
+  let fieldStartingAlpha = 0.07;
 
   /* -------------------------------------------------------------- */
   /*                            BINDINGS                            */
@@ -40,13 +40,13 @@
     // The sim needs the `height` to place the levels
     entrySimulation = setSimulationForces(forceSimulation(), width, height);
     fieldSimulation = setSimulationForces(forceSimulation(), width, height, {
-      alphaTarget: alphaTarget,
-      alphaMin: alphaMin,
-      alphaDecay: alphaDecay,
-      velocityDecay: velocityDecay,
-      collisionStrength: collisionStrength,
-      positionStrength: positionStrength,
-      iterations: iterations
+      alphaTarget: fieldAlphaTarget,
+      alphaMin: fieldAlphaMin,
+      alphaDecay: fieldAlphaDeca,
+      velocityDecay: fieldVelocityDecay,
+      collisionStrength: fieldCollisionStrength,
+      positionStrength: fieldCositionStrength,
+      iterations: fieldIterations
     });
   }
 
@@ -62,7 +62,7 @@
       },
       height,
       () => {
-        runFieldSimulation(fieldSimulation, model, startingAlpha);
+        runFieldSimulation(fieldSimulation, model, fieldStartingAlpha);
       }
     );
     enterFromLeft = !enterFromLeft;
@@ -79,7 +79,7 @@
         model,
         { startingX: width / 2, startingY: height },
         () => {
-          runFieldSimulation(fieldSimulation, model, startingAlpha);
+          runFieldSimulation(fieldSimulation, model, fieldStartingAlpha);
         }
       );
     }, 0);
