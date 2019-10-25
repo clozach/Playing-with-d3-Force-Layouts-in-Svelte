@@ -21,7 +21,7 @@
   $: count = positioner.count;
 </script>
 
-<g id="cloud-group">
+<g id="grass-group">
   {#each integers(0, count()) as i}
     <GrassTuft
       x={positioner.x(i)}

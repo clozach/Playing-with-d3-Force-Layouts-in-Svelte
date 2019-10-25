@@ -43,9 +43,12 @@
     });
   };
 
+  let balloonCount = 0;
+
   export const newBalloonData = () => {
+    balloonCount++;
     return {
-      id: `${Math.random()}`,
+      id: balloonCount,
       height: pickOne(Object.keys(levelMap))
     };
   };
@@ -59,20 +62,26 @@
     var clone = templateBalloon.cloneNode(true);
     clone.getElementsByTagName("text")[0].innerHTML = this.__data__.height; // UGH
     clone.classList.toggle("template-balloon");
+    clone.classList.toggle("new-balloon");
     return clone;
   }
 
-  export const runEntrySimulation = (sim, data, height) => {
-    runSim(sim, data, {
-      startingX: -100,
-      startingY: height
-    });
+  export const runEntrySimulation = (sim, data, height, completion) => {
+    runSim(
+      sim,
+      data,
+      {
+        startingX: -100,
+        startingY: height
+      },
+      completion
+    );
   };
 
-  function runSim(sim, data, { startingX, startingY }) {
+  function runSim(sim, data, { startingX, startingY }, completion) {
     function selectionFrom(newdata) {
       const g = select("#balloon-group");
-      const balloons = g.selectAll("svg");
+      const balloons = g.selectAll(".new-balloon");
 
       return balloons
         .data(newdata, d => d.id)
@@ -82,6 +91,7 @@
               .append(balloonCreator)
               .attr("fx", d => (d.fx = startingX))
               .attr("fy", d => (d.fy = startingY)),
+          // .classed("new-balloon", false),
           update => update,
           exit => exit
         );
@@ -92,6 +102,7 @@
     // Without this, the simulation will have no more "energy" when
     // balloons get added after the first run.
     sim.alpha(1);
+    sim.alphaMin(0.3); // Leave some "room" for the field sim to take over
 
     // d3-selection and d3-force are completely independent, so we
     // need to let the sim know the data's changed, too.
@@ -115,8 +126,37 @@
       }
     });
 
+    sim.on("end", () => {
+      selection.classed("new-balloon", false);
+      setTimeout(() => {
+        completion(selection);
+      }, 1);
+    });
+
     sim.restart();
   }
+
+  export const runFieldSimulation = (sim, data) => {
+    function selectionFrom(newdata) {
+      const g = select("#balloon-group");
+      const balloons = g.selectAll("svg");
+
+      return balloons.data(newdata, d => d.id);
+    }
+
+    const selection = selectionFrom(data);
+
+    sim.alpha(1);
+
+    sim.nodes(data);
+
+    sim.on("tick", () => {
+      selection.attr("x", d => d.x);
+      selection.attr("y", d => d.y);
+    });
+
+    sim.restart();
+  };
 
   /**
    * Configures the simulation with the forces that position the balloons in their final resting place.
