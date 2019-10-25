@@ -66,19 +66,12 @@
     return clone;
   }
 
-  export const runEntrySimulation = (sim, data, height, completion) => {
-    runSim(
-      sim,
-      data,
-      {
-        startingX: -100,
-        startingY: height
-      },
-      completion
-    );
-  };
-
-  function runSim(sim, data, { startingX, startingY }, completion) {
+  export const runEntrySimulation = (
+    sim,
+    data,
+    { startingX, startingY },
+    completion
+  ) => {
     function selectionFrom(newdata) {
       const g = select("#balloon-group");
       const balloons = g.selectAll(".new-balloon");
@@ -134,7 +127,7 @@
     });
 
     sim.restart();
-  }
+  };
 
   export const runFieldSimulation = (sim, data, alpha) => {
     function selectionFrom(newdata) {

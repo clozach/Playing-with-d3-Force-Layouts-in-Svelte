@@ -17,6 +17,7 @@
   /* -------------------------------------------------------------- */
 
   let model = initialBalloons;
+  let enterFromLeft = false;
   let entrySimulation; // Resets whenever the window width & height refresh
   let fieldSimulation; // Resets whenever the window width & height refresh
   let width;
@@ -52,15 +53,36 @@
   const addNewBalloon = () => {
     const newBalloons = [newBalloonData()];
     model = model.concat(newBalloons);
-    runEntrySimulation(entrySimulation, newBalloons, height, () => {
-      runFieldSimulation(fieldSimulation, model, startingAlpha);
-    });
+    runEntrySimulation(
+      entrySimulation,
+      newBalloons,
+      {
+        startingX: enterFromLeft ? -100 : width + 100,
+        startingY: height
+      },
+      height,
+      () => {
+        runFieldSimulation(fieldSimulation, model, startingAlpha);
+      }
+    );
+    enterFromLeft = !enterFromLeft;
   };
 
   const startup = () => {
-    runEntrySimulation(entrySimulation, model, height, () => {
-      runFieldSimulation(fieldSimulation, model, 1);
-    });
+    // The `setTimout`, gives us one extra run loop because, from what
+    // I can tell, the width and height won't be ready till then,
+    // causing the balloons to all start at (0,0) with a shite-ton of
+    // warnings. See previous commit to see this in action.
+    setTimeout(() => {
+      runEntrySimulation(
+        fieldSimulation,
+        model,
+        { startingX: width / 2, startingY: height },
+        () => {
+          runFieldSimulation(fieldSimulation, model, startingAlpha);
+        }
+      );
+    }, 0);
   };
 
   /* -------------------------------------------------------------- */
