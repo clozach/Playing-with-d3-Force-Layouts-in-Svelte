@@ -44,17 +44,19 @@
     const newBalloons = [newBalloonData()];
     model = model.concat(newBalloons);
 
-    runEntrySimulation(
-      entrySimulation,
-      newBalloons,
-      height,
-      endEntrySelection => {
-        runFieldSimulation(fieldSimulation, model, endEntrySelection);
-      }
-    );
+    runEntrySimulation(entrySimulation, newBalloons, height, () => {
+      runFieldSimulation(fieldSimulation, model);
+    });
   };
 
-  const startup = () => {};
+  const startup = () => {
+    // Force one more turn of the runloop. See git blame for details.
+    setTimeout(() => {
+      runEntrySimulation(entrySimulation, model, height, () => {
+        runFieldSimulation(fieldSimulation, model);
+      });
+    }, 0);
+  };
 
   /* -------------------------------------------------------------- */
   /*                             RUNTIME                            */
