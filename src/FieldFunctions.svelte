@@ -136,7 +136,7 @@
     sim.restart();
   }
 
-  export const runFieldSimulation = (sim, data) => {
+  export const runFieldSimulation = (sim, data, alpha) => {
     function selectionFrom(newdata) {
       const g = select("#balloon-group");
       const balloons = g.selectAll("svg");
@@ -146,7 +146,7 @@
 
     const selection = selectionFrom(data);
 
-    sim.alpha(0.5);
+    sim.alpha(alpha);
 
     sim.nodes(data);
 

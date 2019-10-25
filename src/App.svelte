@@ -29,6 +29,7 @@
   let collisionStrength = 1;
   let positionStrength = 0.9;
   let iterations = 9;
+  let startingAlpha = 0.07;
 
   /* -------------------------------------------------------------- */
   /*                            BINDINGS                            */
@@ -52,13 +53,13 @@
     const newBalloons = [newBalloonData()];
     model = model.concat(newBalloons);
     runEntrySimulation(entrySimulation, newBalloons, height, () => {
-      runFieldSimulation(fieldSimulation, model);
+      runFieldSimulation(fieldSimulation, model, startingAlpha);
     });
   };
 
   const startup = () => {
     runEntrySimulation(entrySimulation, model, height, () => {
-      runFieldSimulation(fieldSimulation, model);
+      runFieldSimulation(fieldSimulation, model, 1);
     });
   };
 
