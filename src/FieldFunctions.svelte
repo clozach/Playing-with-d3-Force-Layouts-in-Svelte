@@ -161,7 +161,14 @@
   /**
    * Configures the simulation with the forces that position the balloons in their final resting place.
    */
-  export const setSimulationForces = (sim, width, height) => {
+  export const setSimulationForces = (
+    sim,
+    width,
+    height,
+    alphaDecay = 1 - Math.pow(0.001, 1 / 300)
+    // This 👆 is the default d3force alphaDecay, roughly equating to
+    // 0.023… https://github.com/d3/d3-force#simulation_alphaDecay
+  ) => {
     const horizontalCenter = d => {
       return width / 2;
     };
@@ -173,6 +180,7 @@
     };
 
     return sim
+      .alphaDecay(alphaDecay)
       .force("collisions", forceCollide().radius(30))
       .force("x", forceX().x(horizontalCenter))
       .force("y", forceY().y(verticalLevelCenter));

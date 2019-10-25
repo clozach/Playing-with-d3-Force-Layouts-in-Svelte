@@ -16,6 +16,8 @@
   /*                              MODEL                             */
   /* -------------------------------------------------------------- */
 
+  const alphaDecayForEntry = 0.1;
+
   let model = initialBalloons;
   let entrySimulation; // Resets whenever the window width & height refresh
   let fieldSimulation; // Resets whenever the window width & height refresh
@@ -28,13 +30,20 @@
 
   $: {
     // The sim needs the `height` to place the levels
-    entrySimulation = setSimulationForces(forceSimulation(), width, height);
+    entrySimulation = setSimulationForces(
+      forceSimulation(),
+      width,
+      height,
+      alphaDecayForEntry
+    );
+
     fieldSimulation = setSimulationForces(forceSimulation(), width, height);
   }
 
   const addNewBalloon = () => {
     const newBalloons = [newBalloonData()];
     model = model.concat(newBalloons);
+
     runEntrySimulation(
       entrySimulation,
       newBalloons,
