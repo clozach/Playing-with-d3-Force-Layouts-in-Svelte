@@ -38,17 +38,16 @@
   const addNewBalloon = () => {
     const newBalloons = [newBalloonData()];
     model = model.concat(newBalloons);
-    runEntrySimulation(
-      entrySimulation,
-      newBalloons,
-      height,
-      endEntrySelection => {
-        runFieldSimulation(fieldSimulation, model, endEntrySelection);
-      }
-    );
+    runEntrySimulation(entrySimulation, newBalloons, height, () => {
+      runFieldSimulation(fieldSimulation, model);
+    });
   };
 
-  const startup = () => {};
+  const startup = () => {
+    runEntrySimulation(entrySimulation, model, height, () => {
+      runFieldSimulation(fieldSimulation, model);
+    });
+  };
 
   /* -------------------------------------------------------------- */
   /*                             RUNTIME                            */
