@@ -29,7 +29,10 @@
   $: {
     // The sim needs the `height` to place the levels
     entrySimulation = setSimulationForces(forceSimulation(), width, height);
-    fieldSimulation = setSimulationForces(forceSimulation(), width, height);
+    fieldSimulation = setSimulationForces(forceSimulation(), width, height, {
+      collisionStrength: 1,
+      iterations: 9
+    });
   }
 
   const addNewBalloon = () => {

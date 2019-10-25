@@ -101,7 +101,7 @@
 
     // Without this, the simulation will have no more "energy" when
     // balloons get added after the first run.
-    sim.alpha(1);
+    sim.alpha(0.9);
     sim.alphaMin(0.3); // Leave some "room" for the field sim to take over
 
     // d3-selection and d3-force are completely independent, so we
@@ -130,7 +130,7 @@
       selection.classed("new-balloon", false);
       setTimeout(() => {
         completion(selection);
-      }, 1);
+      }, 0);
     });
 
     sim.restart();
@@ -146,7 +146,7 @@
 
     const selection = selectionFrom(data);
 
-    sim.alpha(1);
+    sim.alpha(0.5);
 
     sim.nodes(data);
 
@@ -161,7 +161,15 @@
   /**
    * Configures the simulation with the forces that position the balloons in their final resting place.
    */
-  export const setSimulationForces = (sim, width, height) => {
+  export const setSimulationForces = (
+    sim,
+    width,
+    height,
+    { collisionStrength, iterations } = {
+      collisionStrength: 0.7,
+      iterations: 1
+    }
+  ) => {
     const horizontalCenter = d => {
       return width / 2;
     };
@@ -173,7 +181,13 @@
     };
 
     return sim
-      .force("collisions", forceCollide().radius(30))
+      .force(
+        "collisions",
+        forceCollide()
+          .radius(30)
+          .strength(collisionStrength)
+          .iterations(iterations)
+      )
       .force("x", forceX().x(horizontalCenter))
       .force("y", forceY().y(verticalLevelCenter));
   };
