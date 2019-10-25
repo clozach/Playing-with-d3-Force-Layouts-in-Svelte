@@ -1,6 +1,5 @@
 <script context="module">
   export const initialBalloons = [
-    { id: "5", height: "top" },
     { id: "a", height: "top" },
     { id: "b", height: "top" },
     { id: "c", height: "up" },

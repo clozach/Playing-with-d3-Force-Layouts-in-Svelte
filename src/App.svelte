@@ -22,6 +22,14 @@
   let width;
   let height;
 
+  let alphaTarget = 0;
+  let alphaMin = 0.001;
+  let alphaDecay = 0.0228;
+  let velocityDecay = 0.4;
+  let collisionStrength = 1;
+  let positionStrength = 0.9;
+  let iterations = 9;
+
   /* -------------------------------------------------------------- */
   /*                            BINDINGS                            */
   /* -------------------------------------------------------------- */
@@ -30,8 +38,13 @@
     // The sim needs the `height` to place the levels
     entrySimulation = setSimulationForces(forceSimulation(), width, height);
     fieldSimulation = setSimulationForces(forceSimulation(), width, height, {
-      collisionStrength: 1,
-      iterations: 9
+      alphaTarget: alphaTarget,
+      alphaMin: alphaMin,
+      alphaDecay: alphaDecay,
+      velocityDecay: velocityDecay,
+      collisionStrength: collisionStrength,
+      positionStrength: positionStrength,
+      iterations: iterations
     });
   }
 

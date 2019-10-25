@@ -165,8 +165,21 @@
     sim,
     width,
     height,
-    { collisionStrength, iterations } = {
+    {
+      alphaTarget,
+      alphaMin,
+      alphaDecay,
+      velocityDecay,
+      collisionStrength,
+      iterations,
+      positionStrength
+    } = {
+      alphaTarget: 0,
+      alphaMin: 0.001,
+      alphaDecay: 0.0228,
+      velocityDecay: 0.4,
       collisionStrength: 0.7,
+      positionStrength: 0.1,
       iterations: 1
     }
   ) => {
@@ -181,6 +194,10 @@
     };
 
     return sim
+      .alphaTarget(alphaTarget)
+      .alphaMin(alphaMin)
+      .alphaDecay(alphaDecay)
+      .velocityDecay(velocityDecay)
       .force(
         "collisions",
         forceCollide()
