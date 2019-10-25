@@ -66,16 +66,20 @@
     return clone;
   }
 
-  export const runEntrySimulation = (sim, data, height, completion) => {
+  let balloonsEnterFromRight = false;
+  export const runEntrySimulation = (sim, data, width, height, completion) => {
     runSim(
       sim,
       data,
       {
-        startingX: -100,
+        startingX: balloonsEnterFromRight ? -100 : width,
         startingY: height
       },
       completion
     );
+
+    // Toggle new balloon entry point, L/R
+    balloonsEnterFromRight = !balloonsEnterFromRight;
   };
 
   function runSim(sim, data, { startingX, startingY }, completion) {
